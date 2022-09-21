@@ -1,28 +1,50 @@
-const btnCreate = document.querySelector("button[data-create");
-const btnDestroy = document.querySelector("button[data-destroy]");
-const boxDiv = document.querySelector("#boxes");
-const input = document.querySelector("input");
-let valueBox = 30;
+const controlsRef = document.querySelector("#controls");
+const inputRef = controlsRef.querySelector("input");
+const createBtnRef = controlsRef.querySelector("[data-create]");
+const destroyBtnRef = controlsRef.querySelector("[data-destroy]");
+const boxesRef = document.querySelector("#boxes");
+
+inputRef.value = 0;
+
+createBtnRef.addEventListener("click", onCreateBtnClick);
+destroyBtnRef.addEventListener("click", onDestroyBtnClick);
+
+function onCreateBtnClick() {
+  createBoxes(inputRef.valueAsNumber);
+}
+function onDestroyBtnClick() {
+  clearElement(boxesRef);
+}
+
+function createBoxes(amount) {
+  clearElement(boxesRef);
+  boxesRef.insertAdjacentHTML("beforeend", getBoxListTemplate(amount));
+}
+
+function getBoxListTemplate(amount) {
+  const arr = [];
+  for (let i = 30; i <= 30 + (amount - 1) * 10; i = i + 10) {
+    arr.push(i);
+  }
+  return arr.map((it) => getBoxItemTemplate(it)).join("");
+}
+
+function getBoxItemTemplate(size) {
+  const color = getRandomHexColor();
+  return `
+  <div
+    style='width:${size}px;
+    height:${size}px;
+    background-color:${color}'></div>
+  `;
+}
+
+function clearElement(el) {
+  while (el.childNodes.length > 0) {
+    el.firstChild.remove();
+  }
+}
 
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 }
-
-function createBoxes(amount) {
-  amount = input.value;
-
-  const box = document.createElement("div");
-  box.classList.add("box");
-  boxstyle.backgroundColor = `${getRandomHexColor()}`;
-  box.style.width = valueBox + "px";
-  box.style.height = valueBox + "px";
-  boxDiv.after(box);
-}
-
-function destroyBoxes() {
-  const boxEl = document.querySelector(".box");
-  boxEl.remove();
-}
-
-btnCreate.addEventListener("click", createBoxes);
-btnDestroy.addEventListener("click", destroyBoxes);
